@@ -1,6 +1,7 @@
 package com.indramakassar.view;
 
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
@@ -26,7 +27,7 @@ public class ClassView extends JFrame {
 
     public ClassView() {
         setTitle("Class Management - SkillHub");
-        setSize(1000, 600);
+        setSize(1100, 650); // Ukuran sedikit lebih besar
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -38,11 +39,20 @@ public class ClassView extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Form Panel (North)
-        mainPanel.add(createFormPanel(), BorderLayout.NORTH);
+        // Form/Sidebar Panel (WEST)
+        JPanel formSidebar = createFormPanel();
+        formSidebar.setPreferredSize(new Dimension(350, 600)); // Lebar yang konsisten untuk sidebar
 
-        // Table Panel (Center)
-        mainPanel.add(createTablePanel(), BorderLayout.CENTER);
+        // Table Panel (CENTER)
+        JPanel tablePanel = createTablePanel();
+
+        // Menggunakan JSplitPane untuk membagi Form dan Tabel
+        JSplitPane splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formSidebar, tablePanel);
+        splitPane.setDividerLocation(350);
+        splitPane.setDividerSize(5);
+        splitPane.setResizeWeight(0);
+
+        mainPanel.add(splitPane, BorderLayout.CENTER);
 
         // Status Panel (South)
         mainPanel.add(createStatusPanel(), BorderLayout.SOUTH);
@@ -50,107 +60,125 @@ public class ClassView extends JFrame {
         add(mainPanel);
     }
 
-    private JPanel createFormPanel() {
-        JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createTitledBorder("Class Form"));
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
-        gbc.fill = GridBagConstraints.HORIZONTAL;
+    /** Helper untuk membuat baris input */
+    private JPanel createInputRow(String labelText, JComponent input, int height) {
+        JPanel rowPanel = new JPanel(new BorderLayout(10, 5));
+        rowPanel.setBackground(Color.WHITE);
 
-        // ID field (hidden/readonly)
-        gbc.gridx = 0; gbc.gridy = 0;
-        formPanel.add(new JLabel("ID:"), gbc);
-        gbc.gridx = 1;
+        JLabel label = new JLabel(labelText);
+        label.setPreferredSize(new Dimension(80, height));
+        label.setFont(new Font("SansSerif", Font.PLAIN, 12));
+
+        // Jika bukan JTextArea, set max size
+        if (!(input instanceof JScrollPane)) {
+            input.setMaximumSize(new Dimension(Short.MAX_VALUE, input.getPreferredSize().height));
+        }
+
+        rowPanel.add(label, BorderLayout.WEST);
+        rowPanel.add(input, BorderLayout.CENTER);
+        rowPanel.setBorder(new EmptyBorder(5, 0, 5, 0));
+
+        return rowPanel;
+    }
+
+    private JPanel createFormPanel() {
+        JPanel formPanel = new JPanel();
+        formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
+        formPanel.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(new Color(220, 220, 220)),
+                BorderFactory.createEmptyBorder(20, 20, 20, 20)
+        ));
+        formPanel.setBackground(Color.WHITE);
+
+        JLabel formTitle = new JLabel("CLASS FORM");
+        formTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        formTitle.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formPanel.add(formTitle);
+        formPanel.add(Box.createVerticalStrut(15));
+
+        // Inisialisasi komponen
         txtId = new JTextField(20);
         txtId.setEditable(false);
-        txtId.setBackground(Color.LIGHT_GRAY);
-        formPanel.add(txtId, gbc);
-
-        // Class Name field
-        gbc.gridx = 0; gbc.gridy = 1;
-        formPanel.add(new JLabel("Class Name: *"), gbc);
-        gbc.gridx = 1;
+        txtId.setBackground(new Color(245, 245, 245));
+        txtId.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 200)));
         txtClassName = new JTextField(20);
-        formPanel.add(txtClassName, gbc);
+        txtInstructor = new JTextField(20);
 
-        // Description field (TextArea)
-        gbc.gridx = 0; gbc.gridy = 2;
-        gbc.anchor = GridBagConstraints.NORTH;
-        formPanel.add(new JLabel("Description:"), gbc);
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.BOTH;
-        txtDescription = new JTextArea(3, 20);
+        // Khusus untuk JTextArea
+        txtDescription = new JTextArea(4, 20);
         txtDescription.setLineWrap(true);
         txtDescription.setWrapStyleWord(true);
         JScrollPane scrollDesc = new JScrollPane(txtDescription);
-        formPanel.add(scrollDesc, gbc);
+        scrollDesc.setPreferredSize(new Dimension(20, 80)); // Tinggi yang lebih jelas
+        scrollDesc.setBorder(UIManager.getBorder("TextField.border"));
 
-        // Instructor field
-        gbc.gridx = 0; gbc.gridy = 3;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        formPanel.add(new JLabel("Instructor:"), gbc);
-        gbc.gridx = 1;
-        txtInstructor = new JTextField(20);
-        formPanel.add(txtInstructor, gbc);
+        // Tambahkan baris input
+        formPanel.add(createInputRow("ID:", txtId, 25));
+        formPanel.add(createInputRow("Name: *", txtClassName, 25));
+        formPanel.add(createInputRow("Instructor:", txtInstructor, 25));
+        formPanel.add(createInputRow("Description:", scrollDesc, 80)); // Tinggi khusus untuk area teks
 
-        // Buttons panel
-        gbc.gridx = 0; gbc.gridy = 4;
-        gbc.gridwidth = 2;
-        formPanel.add(createButtonPanel(), gbc);
+        formPanel.add(Box.createVerticalStrut(30));
+
+        JPanel buttonContainer = createButtonPanel();
+        buttonContainer.setAlignmentX(Component.LEFT_ALIGNMENT);
+        formPanel.add(buttonContainer);
+
+        formPanel.add(Box.createVerticalGlue());
 
         return formPanel;
     }
 
     private JPanel createButtonPanel() {
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+        // Menggunakan GridLayout 2x2
+        JPanel buttonGrid = new JPanel(new GridLayout(2, 2, 10, 10));
+        buttonGrid.setOpaque(false);
 
-        btnAdd = new JButton("Add Class");
-        btnAdd.setBackground(new Color(76, 175, 80));
-        btnAdd.setForeground(Color.WHITE);
-        btnAdd.setFocusPainted(false);
-        btnAdd.setOpaque(true);
-        btnAdd.setBorderPainted(true);
+        btnAdd = createStyledButton("Add Class", new Color(76, 175, 80));
+        btnUpdate = createStyledButton("Update Class", new Color(33, 150, 243));
+        btnDelete = createStyledButton("Delete Class", new Color(244, 67, 54));
+        btnClear = createStyledButton("Clear Form", new Color(97, 97, 97));
 
-        btnUpdate = new JButton("Update Class");
-        btnUpdate.setBackground(new Color(33, 150, 243));
-        btnUpdate.setForeground(Color.WHITE);
-        btnUpdate.setFocusPainted(false);
-        btnUpdate.setOpaque(true);
-        btnUpdate.setBorderPainted(true);
+        buttonGrid.add(btnAdd);
+        buttonGrid.add(btnUpdate);
+        buttonGrid.add(btnDelete);
+        buttonGrid.add(btnClear);
 
-        btnDelete = new JButton("Delete Class");
-        btnDelete.setBackground(new Color(244, 67, 54));
-        btnDelete.setForeground(Color.WHITE);
-        btnDelete.setFocusPainted(false);
-        btnDelete.setOpaque(true);
-        btnDelete.setBorderPainted(true);
+        return buttonGrid;
+    }
 
-        btnClear = new JButton("Clear Form");
-        btnClear.setBackground(new Color(97, 97, 97));
-        btnClear.setForeground(Color.WHITE);
-        btnClear.setFocusPainted(false);
-        btnClear.setOpaque(true);
-        btnClear.setBorderPainted(true);
+    private JButton createStyledButton(String text, Color color) {
+        JButton button = new JButton(text);
+        button.setBackground(color);
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setOpaque(true);
+        button.setFont(new Font("SansSerif", Font.BOLD, 12));
+        button.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        button.setPreferredSize(new Dimension(150, 35));
 
-        buttonPanel.add(btnAdd);
-        buttonPanel.add(btnUpdate);
-        buttonPanel.add(btnDelete);
-        buttonPanel.add(btnClear);
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                button.setBackground(color.darker());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setBackground(color);
+            }
+        });
 
-        return buttonPanel;
+        return button;
     }
 
     private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
         tablePanel.setBorder(BorderFactory.createTitledBorder("Classes List"));
 
-        // Table model
         String[] columns = {"ID", "Class Name", "Description", "Instructor"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
-                return false; // Make table read-only
+                return false;
             }
         };
 
@@ -158,7 +186,12 @@ public class ClassView extends JFrame {
         tableClasses.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tableClasses.getTableHeader().setReorderingAllowed(false);
 
-        // Set column widths
+        // Perbaikan Visual Tabel
+        tableClasses.setRowHeight(28);
+        tableClasses.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        tableClasses.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+        tableClasses.getTableHeader().setBackground(new Color(240, 240, 240));
+
         tableClasses.getColumnModel().getColumn(0).setPreferredWidth(50);
         tableClasses.getColumnModel().getColumn(1).setPreferredWidth(200);
         tableClasses.getColumnModel().getColumn(2).setPreferredWidth(300);
@@ -177,30 +210,31 @@ public class ClassView extends JFrame {
         lblStatus = new JLabel(" ");
         lblStatus.setFont(new Font("Arial", Font.PLAIN, 12));
         lblStatus.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(Color.LIGHT_GRAY),
+                BorderFactory.createLineBorder(new Color(220, 220, 220)),
                 BorderFactory.createEmptyBorder(5, 10, 5, 10)
         ));
+        lblStatus.setOpaque(true);
 
         statusPanel.add(lblStatus, BorderLayout.CENTER);
         return statusPanel;
     }
 
-    // Method to set status message
+    // Method to set status message (Dibiarkan sama)
     public void setStatusMessage(String message, boolean isError) {
         lblStatus.setText(message);
         if (isError) {
-            lblStatus.setForeground(new Color(211, 47, 47)); // Red
-            lblStatus.setBackground(new Color(255, 235, 238)); // Light red
+            lblStatus.setForeground(new Color(198, 40, 40));
+            lblStatus.setBackground(new Color(255, 235, 238));
         } else {
-            lblStatus.setForeground(new Color(56, 142, 60)); // Green
-            lblStatus.setBackground(new Color(232, 245, 233)); // Light green
+            lblStatus.setForeground(new Color(46, 125, 50));
+            lblStatus.setBackground(new Color(232, 245, 233));
         }
         lblStatus.setOpaque(true);
 
-        // Clear message after 5 seconds
         Timer timer = new Timer(5000, e -> {
             lblStatus.setText(" ");
             lblStatus.setOpaque(false);
+            lblStatus.setBackground(null);
         });
         timer.setRepeats(false);
         timer.start();
@@ -209,6 +243,7 @@ public class ClassView extends JFrame {
     public void clearStatusMessage() {
         lblStatus.setText(" ");
         lblStatus.setOpaque(false);
+        lblStatus.setBackground(null);
     }
 
     // Getters for controller access

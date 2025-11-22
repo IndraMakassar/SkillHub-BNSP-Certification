@@ -1,6 +1,7 @@
 package com.indramakassar.controller;
 
 import com.indramakassar.view.ClassView;
+import com.indramakassar.view.EnrollmentView;
 import com.indramakassar.view.MainMenuView;
 import com.indramakassar.view.StudentView;
 
@@ -21,7 +22,7 @@ public class MainMenuController {
         // Class Management button
         view.getBtnClasses().addActionListener(e -> openClassManagement());
 
-        // Enrollment Management button (placeholder for now)
+        // Enrollment Management button
         view.getBtnEnrollments().addActionListener(e -> openEnrollmentManagement());
 
         // Exit button
@@ -41,12 +42,9 @@ public class MainMenuController {
     }
 
     private void openEnrollmentManagement() {
-        JOptionPane.showMessageDialog(
-                view,
-                "Enrollment Management will be implemented next!",
-                "Coming Soon",
-                JOptionPane.INFORMATION_MESSAGE
-        );
+        EnrollmentView enrollmentView = new EnrollmentView();
+        new EnrollmentController(enrollmentView);
+        enrollmentView.setVisible(true);
     }
 
     private void exitApplication() {

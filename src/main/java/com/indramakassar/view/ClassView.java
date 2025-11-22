@@ -4,12 +4,12 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class StudentView extends JFrame {
+public class ClassView extends JFrame {
     // Form components
     private JTextField txtId;
-    private JTextField txtName;
-    private JTextField txtEmail;
-    private JTextField txtPhone;
+    private JTextField txtClassName;
+    private JTextArea txtDescription;
+    private JTextField txtInstructor;
 
     // Buttons
     private JButton btnAdd;
@@ -18,15 +18,15 @@ public class StudentView extends JFrame {
     private JButton btnClear;
 
     // Table
-    private JTable tableStudents;
+    private JTable tableClasses;
     private DefaultTableModel tableModel;
 
     // Status label
     private JLabel lblStatus;
 
-    public StudentView() {
-        setTitle("Student Management - SkillHub");
-        setSize(900, 600);
+    public ClassView() {
+        setTitle("Class Management - SkillHub");
+        setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
@@ -52,7 +52,7 @@ public class StudentView extends JFrame {
 
     private JPanel createFormPanel() {
         JPanel formPanel = new JPanel(new GridBagLayout());
-        formPanel.setBorder(BorderFactory.createTitledBorder("Student Form"));
+        formPanel.setBorder(BorderFactory.createTitledBorder("Class Form"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.fill = GridBagConstraints.HORIZONTAL;
@@ -66,26 +66,33 @@ public class StudentView extends JFrame {
         txtId.setBackground(Color.LIGHT_GRAY);
         formPanel.add(txtId, gbc);
 
-        // Name field
+        // Class Name field
         gbc.gridx = 0; gbc.gridy = 1;
-        formPanel.add(new JLabel("Name: *"), gbc);
+        formPanel.add(new JLabel("Class Name: *"), gbc);
         gbc.gridx = 1;
-        txtName = new JTextField(20);
-        formPanel.add(txtName, gbc);
+        txtClassName = new JTextField(20);
+        formPanel.add(txtClassName, gbc);
 
-        // Email field
+        // Description field (TextArea)
         gbc.gridx = 0; gbc.gridy = 2;
-        formPanel.add(new JLabel("Email:"), gbc);
+        gbc.anchor = GridBagConstraints.NORTH;
+        formPanel.add(new JLabel("Description:"), gbc);
         gbc.gridx = 1;
-        txtEmail = new JTextField(20);
-        formPanel.add(txtEmail, gbc);
+        gbc.fill = GridBagConstraints.BOTH;
+        txtDescription = new JTextArea(3, 20);
+        txtDescription.setLineWrap(true);
+        txtDescription.setWrapStyleWord(true);
+        JScrollPane scrollDesc = new JScrollPane(txtDescription);
+        formPanel.add(scrollDesc, gbc);
 
-        // Phone field
+        // Instructor field
         gbc.gridx = 0; gbc.gridy = 3;
-        formPanel.add(new JLabel("Phone:"), gbc);
+        gbc.anchor = GridBagConstraints.CENTER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        formPanel.add(new JLabel("Instructor:"), gbc);
         gbc.gridx = 1;
-        txtPhone = new JTextField(20);
-        formPanel.add(txtPhone, gbc);
+        txtInstructor = new JTextField(20);
+        formPanel.add(txtInstructor, gbc);
 
         // Buttons panel
         gbc.gridx = 0; gbc.gridy = 4;
@@ -98,21 +105,21 @@ public class StudentView extends JFrame {
     private JPanel createButtonPanel() {
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 
-        btnAdd = new JButton("Add Student");
+        btnAdd = new JButton("Add Class");
         btnAdd.setBackground(new Color(76, 175, 80));
         btnAdd.setForeground(Color.WHITE);
         btnAdd.setFocusPainted(false);
         btnAdd.setOpaque(true);
         btnAdd.setBorderPainted(true);
 
-        btnUpdate = new JButton("Update Student");
+        btnUpdate = new JButton("Update Class");
         btnUpdate.setBackground(new Color(33, 150, 243));
         btnUpdate.setForeground(Color.WHITE);
         btnUpdate.setFocusPainted(false);
         btnUpdate.setOpaque(true);
         btnUpdate.setBorderPainted(true);
 
-        btnDelete = new JButton("Delete Student");
+        btnDelete = new JButton("Delete Class");
         btnDelete.setBackground(new Color(244, 67, 54));
         btnDelete.setForeground(Color.WHITE);
         btnDelete.setFocusPainted(false);
@@ -136,10 +143,10 @@ public class StudentView extends JFrame {
 
     private JPanel createTablePanel() {
         JPanel tablePanel = new JPanel(new BorderLayout());
-        tablePanel.setBorder(BorderFactory.createTitledBorder("Students List"));
+        tablePanel.setBorder(BorderFactory.createTitledBorder("Classes List"));
 
         // Table model
-        String[] columns = {"ID", "Name", "Email", "Phone"};
+        String[] columns = {"ID", "Class Name", "Description", "Instructor"};
         tableModel = new DefaultTableModel(columns, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -147,17 +154,17 @@ public class StudentView extends JFrame {
             }
         };
 
-        tableStudents = new JTable(tableModel);
-        tableStudents.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tableStudents.getTableHeader().setReorderingAllowed(false);
+        tableClasses = new JTable(tableModel);
+        tableClasses.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tableClasses.getTableHeader().setReorderingAllowed(false);
 
         // Set column widths
-        tableStudents.getColumnModel().getColumn(0).setPreferredWidth(50);
-        tableStudents.getColumnModel().getColumn(1).setPreferredWidth(200);
-        tableStudents.getColumnModel().getColumn(2).setPreferredWidth(200);
-        tableStudents.getColumnModel().getColumn(3).setPreferredWidth(150);
+        tableClasses.getColumnModel().getColumn(0).setPreferredWidth(50);
+        tableClasses.getColumnModel().getColumn(1).setPreferredWidth(200);
+        tableClasses.getColumnModel().getColumn(2).setPreferredWidth(300);
+        tableClasses.getColumnModel().getColumn(3).setPreferredWidth(150);
 
-        JScrollPane scrollPane = new JScrollPane(tableStudents);
+        JScrollPane scrollPane = new JScrollPane(tableClasses);
         tablePanel.add(scrollPane, BorderLayout.CENTER);
 
         return tablePanel;
@@ -206,12 +213,12 @@ public class StudentView extends JFrame {
 
     // Getters for controller access
     public JTextField getTxtId() { return txtId; }
-    public JTextField getTxtName() { return txtName; }
-    public JTextField getTxtEmail() { return txtEmail; }
-    public JTextField getTxtPhone() { return txtPhone; }
+    public JTextField getTxtClassName() { return txtClassName; }
+    public JTextArea getTxtDescription() { return txtDescription; }
+    public JTextField getTxtInstructor() { return txtInstructor; }
     public JButton getBtnAdd() { return btnAdd; }
     public JButton getBtnUpdate() { return btnUpdate; }
     public JButton getBtnDelete() { return btnDelete; }
     public JButton getBtnClear() { return btnClear; }
-    public JTable getTableStudents() { return tableStudents; }
+    public JTable getTableClasses() { return tableClasses; }
 }

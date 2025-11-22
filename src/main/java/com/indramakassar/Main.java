@@ -1,9 +1,9 @@
 package com.indramakassar;
 
 
-import com.indramakassar.controller.StudentController;
+import com.indramakassar.controller.MainMenuController;
 import com.indramakassar.database.DatabaseInitializer;
-import com.indramakassar.view.StudentView;
+import com.indramakassar.view.MainMenuView;
 
 import javax.swing.*;
 
@@ -22,8 +22,8 @@ public class Main extends JFrame {
 
         // Start GUI on Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
-            StudentView view = new StudentView();
-            new StudentController(view);
+            MainMenuView view = new MainMenuView();
+            new MainMenuController(view);
             view.setVisible(true);
         });
     }

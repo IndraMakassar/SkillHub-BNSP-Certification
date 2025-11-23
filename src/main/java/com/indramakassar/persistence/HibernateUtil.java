@@ -22,7 +22,7 @@ public class HibernateUtil {
 
             settings.put("hibernate.connection.driver_class", "org.sqlite.JDBC");
 
-            String sqliteUrl = getEnvOrProp("DB_URL", "jdbc:sqlite:database/training_app.db?foreign_keys=on");
+            String sqliteUrl = "jdbc:sqlite:database/training_app.db?foreign_keys=on";
             settings.put("hibernate.connection.url", sqliteUrl);
 
             // SQLite does not require username/password
@@ -30,7 +30,7 @@ public class HibernateUtil {
             settings.put("hibernate.connection.password", "");
 
             // 3. SQLite Dialect
-            String dialect = getEnvOrProp("HIBERNATE_DIALECT", "org.hibernate.community.dialect.SQLiteDialect");
+            String dialect = "org.hibernate.community.dialect.SQLiteDialect";
             settings.put("hibernate.dialect", dialect);
 
             // You may need to specify this for the connection pool to work with SQLite
@@ -38,9 +38,9 @@ public class HibernateUtil {
             // 🛠️ CHANGES FOR SQLITE END HERE 🛠️
 
             // Original settings (unchanged, but using the updated dialect variable)
-            String ddl = getEnvOrProp("HIBERNATE_DDL", "update"); // update|validate|create|create-drop
+            String ddl = "update"; // update|validate|create|create-drop
             settings.put("hibernate.hbm2ddl.auto", ddl);
-            settings.put("hibernate.show_sql", getEnvOrProp("HIBERNATE_SHOW_SQL", "false"));
+            settings.put("hibernate.show_sql", "false");
             settings.put("hibernate.format_sql", "true");
 
 
@@ -56,11 +56,4 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
-    private static String getEnvOrProp(String key, String def) {
-        String sys = System.getProperty(key);
-        if (sys != null && !sys.isEmpty()) return sys;
-        String env = System.getenv(key);
-        if (env != null && !env.isEmpty()) return env;
-        return def;
-    }
 }

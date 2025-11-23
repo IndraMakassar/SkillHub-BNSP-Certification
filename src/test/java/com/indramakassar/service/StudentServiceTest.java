@@ -2,6 +2,7 @@ package com.indramakassar.service;
 
 import com.indramakassar.database.DatabaseInitializer;
 import com.indramakassar.entity.Student;
+import com.indramakassar.persistence.HibernateUtil;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
@@ -17,6 +18,8 @@ public class StudentServiceTest {
 
     @BeforeAll
     public static void setUp() {
+        HibernateUtil.resetSessionFactory();
+
         // Initialize database
         DatabaseInitializer.initialize();
         studentService = new StudentService();

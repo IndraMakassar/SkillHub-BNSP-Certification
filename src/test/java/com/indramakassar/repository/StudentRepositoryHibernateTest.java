@@ -30,6 +30,8 @@ class StudentRepositoryHibernateTest {
         System.setProperty("HIBERNATE_DDL", "create-drop");
         System.setProperty("HIBERNATE_SHOW_SQL", "false");
 
+        HibernateUtil.resetSessionFactory();
+
         // Initialize SessionFactory after properties are set
         SessionFactory sf = HibernateUtil.getSessionFactory();
         assertNotNull(sf, "SessionFactory should initialize");

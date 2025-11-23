@@ -56,4 +56,12 @@ public class HibernateUtil {
         return sessionFactory;
     }
 
+    public static void resetSessionFactory() {
+        if (sessionFactory != null) {
+            sessionFactory.close();
+            sessionFactory = null;
+        }
+    }
+
+
 }

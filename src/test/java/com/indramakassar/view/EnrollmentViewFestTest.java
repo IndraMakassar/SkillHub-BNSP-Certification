@@ -1,5 +1,6 @@
 package com.indramakassar.view;
 
+import com.indramakassar.persistence.HibernateUtil;
 import org.fest.swing.edt.FailOnThreadViolationRepaintManager;
 import org.fest.swing.edt.GuiActionRunner;
 import org.fest.swing.edt.GuiQuery;
@@ -18,6 +19,8 @@ public class EnrollmentViewFestTest {
 
     @BeforeClass
     public static void setupOnce() {
+        HibernateUtil.resetSessionFactory();
+
         // Install FEST to check EDT rule
         FailOnThreadViolationRepaintManager.install();
     }

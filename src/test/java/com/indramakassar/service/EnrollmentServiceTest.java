@@ -4,6 +4,7 @@ import com.indramakassar.database.DatabaseInitializer;
 import com.indramakassar.entity.Class;
 import com.indramakassar.entity.Enrollment;
 import com.indramakassar.entity.Student;
+import com.indramakassar.persistence.HibernateUtil;
 import org.junit.jupiter.api.*;
 
 import java.sql.SQLException;
@@ -23,6 +24,8 @@ public class EnrollmentServiceTest {
 
     @BeforeAll
     public static void setUp() throws SQLException {
+        HibernateUtil.resetSessionFactory();
+
         DatabaseInitializer.initialize();
         enrollmentService = new EnrollmentService();
         studentService = new StudentService();

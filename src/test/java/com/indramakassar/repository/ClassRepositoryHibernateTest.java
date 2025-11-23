@@ -27,6 +27,8 @@ class ClassRepositoryHibernateTest {
         System.setProperty("HIBERNATE_DDL", "create-drop");
         System.setProperty("HIBERNATE_SHOW_SQL", "false");
 
+        HibernateUtil.resetSessionFactory();
+
         SessionFactory sf = HibernateUtil.getSessionFactory();
         assertNotNull(sf);
 

@@ -21,11 +21,6 @@ dependencies {
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
 
-    // Mockito for unit tests (controllers/services)
-    testImplementation("org.mockito:mockito-core:5.14.2")
-    testImplementation("org.mockito:mockito-junit-jupiter:5.14.2")
-    testImplementation("org.mockito:mockito-inline:5.2.0")
-
     // FEST-Swing for UI tests (JUnit 4 based)
     testImplementation("org.easytesting:fest-swing:1.2.1")
     testImplementation("junit:junit:4.13.2")

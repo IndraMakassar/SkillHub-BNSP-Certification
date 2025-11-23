@@ -2,6 +2,7 @@ package com.indramakassar.service;
 
 import com.indramakassar.entity.Class;
 import com.indramakassar.repository.ClassRepository;
+import com.indramakassar.repository.RepositoryFactory;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,7 +11,7 @@ public class ClassService {
     private final ClassRepository classRepository;
 
     public ClassService() {
-        this.classRepository = new ClassRepository();
+        this.classRepository = RepositoryFactory.createClassRepository();
     }
 
     // Create new class with validation

@@ -12,6 +12,11 @@ repositories {
 
 dependencies {
     implementation("org.xerial:sqlite-jdbc:3.45.2.0")
+    implementation("org.hibernate.orm:hibernate-community-dialects:6.4.4.Final")
+
+    // Hibernate + MySQL
+    implementation("org.hibernate.orm:hibernate-core:6.5.2.Final")
+    implementation("jakarta.persistence:jakarta.persistence-api:3.1.0")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")

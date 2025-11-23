@@ -2,6 +2,7 @@ package com.indramakassar.service;
 
 import com.indramakassar.entity.Student;
 import com.indramakassar.repository.StudentRepository;
+import com.indramakassar.repository.RepositoryFactory;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,7 +11,7 @@ public class StudentService {
     private final StudentRepository studentRepository;
 
     public StudentService() {
-        this.studentRepository = new StudentRepository();
+        this.studentRepository = RepositoryFactory.createStudentRepository();
     }
 
     // Create new student with validation

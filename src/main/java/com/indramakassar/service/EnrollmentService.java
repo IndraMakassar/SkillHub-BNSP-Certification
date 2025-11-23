@@ -2,6 +2,7 @@ package com.indramakassar.service;
 
 import com.indramakassar.entity.Enrollment;
 import com.indramakassar.repository.EnrollmentRepository;
+import com.indramakassar.repository.RepositoryFactory;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -10,7 +11,7 @@ public class EnrollmentService {
     private final EnrollmentRepository enrollmentRepository;
 
     public EnrollmentService() {
-        this.enrollmentRepository = new EnrollmentRepository();
+        this.enrollmentRepository = RepositoryFactory.createEnrollmentRepository();
     }
 
     // Enroll student to class

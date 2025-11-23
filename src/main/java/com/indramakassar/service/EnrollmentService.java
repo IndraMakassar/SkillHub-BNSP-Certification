@@ -14,6 +14,11 @@ public class EnrollmentService {
         this.enrollmentRepository = RepositoryFactory.createEnrollmentRepository();
     }
 
+    // Constructor for dependency injection (testing)
+    public EnrollmentService(EnrollmentRepository enrollmentRepository) {
+        this.enrollmentRepository = enrollmentRepository;
+    }
+
     // Enroll student to class
     public void enroll(int studentId, int classId) throws SQLException {
         // Check if already enrolled

@@ -1,7 +1,5 @@
 package com.indramakassar;
 
-
-import com.indramakassar.controller.MainMenuController;
 import com.indramakassar.database.DatabaseInitializer;
 import com.indramakassar.view.MainMenuView;
 
@@ -23,7 +21,6 @@ public class Main extends JFrame {
         // Start GUI on Event Dispatch Thread
         SwingUtilities.invokeLater(() -> {
             MainMenuView view = new MainMenuView();
-            new MainMenuController(view);
             view.setVisible(true);
         });
     }

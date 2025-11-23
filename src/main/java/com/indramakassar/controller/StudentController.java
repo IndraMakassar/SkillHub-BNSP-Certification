@@ -19,6 +19,13 @@ public class StudentController {
         initController();
     }
 
+    // Constructor for dependency injection (testing)
+    public StudentController(StudentView view, StudentService service) {
+        this.view = view;
+        this.service = service;
+        initController();
+    }
+
     private void initController() {
         // Load initial data
         listStudents();
@@ -158,11 +165,11 @@ public class StudentController {
 
     // Show success message
     private void showSuccess(String message) {
-        JOptionPane.showMessageDialog(view, message, "Success", JOptionPane.INFORMATION_MESSAGE);
+        view.setStatusMessage(message, false);
     }
 
     // Show error message
     private void showError(String message) {
-        JOptionPane.showMessageDialog(view, message, "Error", JOptionPane.ERROR_MESSAGE);
+        view.setStatusMessage(message, true);
     }
 }

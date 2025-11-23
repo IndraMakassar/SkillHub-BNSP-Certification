@@ -19,6 +19,13 @@ public class ClassController {
         initController();
     }
 
+    // Constructor for dependency injection (testing)
+    public ClassController(ClassView view, ClassService service) {
+        this.view = view;
+        this.service = service;
+        initController();
+    }
+
     private void initController() {
         // Load initial data
         listClasses();

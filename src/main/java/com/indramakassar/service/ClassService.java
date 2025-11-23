@@ -14,6 +14,11 @@ public class ClassService {
         this.classRepository = RepositoryFactory.createClassRepository();
     }
 
+    // Constructor for dependency injection (testing)
+    public ClassService(ClassRepository classRepository) {
+        this.classRepository = classRepository;
+    }
+
     // Create new class with validation
     public void create(Class classObj) throws SQLException {
         validateClass(classObj);

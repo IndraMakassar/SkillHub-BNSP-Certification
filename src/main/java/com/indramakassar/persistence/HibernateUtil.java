@@ -22,7 +22,7 @@ public class HibernateUtil {
 
             settings.put("hibernate.connection.driver_class", "org.sqlite.JDBC");
 
-            String sqliteUrl = getEnvOrProp("DB_URL", "jdbc:sqlite:database/training_app.db");
+            String sqliteUrl = getEnvOrProp("DB_URL", "jdbc:sqlite:database/training_app.db?foreign_keys=on");
             settings.put("hibernate.connection.url", sqliteUrl);
 
             // SQLite does not require username/password

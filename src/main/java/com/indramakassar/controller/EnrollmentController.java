@@ -37,6 +37,18 @@ public class EnrollmentController {
         initController();
     }
 
+    // Constructor for dependency injection (testing)
+    public EnrollmentController(EnrollmentView view, EnrollmentService enrollmentService,
+                                StudentService studentService, ClassService classService) {
+        this.view = view;
+        this.enrollmentService = enrollmentService;
+        this.studentService = studentService;
+        this.classService = classService;
+        this.studentMap = new HashMap<>();
+        this.classMap = new HashMap<>();
+        initController();
+    }
+
     private void initController() {
         // Load initial data
         loadStudentsComboBox();
